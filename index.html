@@ -1,267 +1,31 @@
-
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>دار حصة | الحجوزات العائلية</title>
-<style>
-:root{font-family:Tahoma,Arial,sans-serif;color:#17202a;background:#f5f6f7}
-*{box-sizing:border-box}
-body{margin:0}
-header{background:#111820;color:white;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-header img{height:52px;max-width:135px;object-fit:contain}
-header small{display:block;color:#c7b48b;margin-top:4px}
-.hero{min-height:310px;background:linear-gradient(90deg,rgba(12,22,30,.72),rgba(12,22,30,.1)),url('IMG_4813.jpeg') center/cover;display:flex;align-items:center;color:white}
-.hero>div{width:min(1100px,94%);margin:auto}
-.hero h1{font-size:clamp(35px,6vw,65px);margin:0}
-.hero p{font-size:18px;line-height:1.9}
-.wrap{max-width:1100px;margin:26px auto;padding:0 15px}
-.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
-.card{background:white;border:1px solid #e5e7eb;border-radius:17px;padding:20px;box-shadow:0 5px 22px #10182009}
-h2{margin:0 0 17px;font-size:21px}
-button,input{font:inherit}
-button{cursor:pointer;border:0;border-radius:9px;padding:11px 14px;background:#182531;color:white}
-button.secondary{background:#eceef0;color:#182531}
-button.danger{background:#b63535}
-button:disabled{opacity:.5;cursor:not-allowed}
-.month{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.week,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.week span{text-align:center;font-size:12px;color:#68737e;padding:8px 0}
-.day{height:51px;border:1px solid #e3e6e8;background:#f8f9fa;color:#1d2934;border-radius:8px}
-.day.selected{outline:2px solid #2b76b7;background:#e2effb}
-.day.confirmed{background:#d8f5e4;border-color:#32a368}
-.day.cancelled{background:#f8f9fa;border-color:#dc5555}
-.day:disabled{opacity:1;cursor:not-allowed}
-.legend{display:flex;flex-wrap:wrap;gap:13px;margin:18px 0 0;font-size:13px}
-.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-left:5px}
-.green{background:#32a368}.red{background:#dc5555}.blue{background:#2b76b7}.gray{background:#e3e6e8}
-label{display:block;font-weight:bold;font-size:13px;margin:15px 0 6px}
-input{width:100%;padding:12px;border:1px solid #d5dbe0;border-radius:9px}
-p.note{font-size:13px;color:#65717d;line-height:1.8}
-.full{width:100%;margin-top:16px}
-.status{padding:10px 12px;border-radius:8px;background:#f4f5f7;margin:10px 0;font-size:13px;overflow-wrap:anywhere}
-.request{border:1px solid #e2e5e8;border-radius:11px;padding:12px;margin:10px 0}
-.request strong{display:block;margin-bottom:6px}
-.request small{color:#68737e}
-.actions{margin-top:10px}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
-.gallery img{width:100%;height:260px;object-fit:cover;border-radius:14px}
-.footer{text-align:center;color:#6c7780;padding:35px 12px;font-size:13px}
-.pill{background:#a9874b;color:white;padding:8px 11px;border-radius:20px;font-size:12px}
-.hidden{display:none!important}
-@media(max-width:760px){.grid{grid-template-columns:1fr}.gallery img{height:190px}.hero{min-height:270px}.day{height:44px;padding:0}header img{height:43px}}
-</style>
-</head>
-<body>
-<header>
-<div><strong>دار حصة</strong><small>الحجوزات العائلية · 3253</small></div>
-<img src="IMG_4814.jpeg" alt="شعار دار حصة">
-<span class="pill">خاص بالعائلة</span>
-</header>
-<section class="hero"><div>
-<h1>دار حصة</h1>
-<p>مكان يجمعنا، وذكريات تبقى. احجز أيامك مباشرة بدون انتظار موافقة المالك.</p>
-</div></section>
-<main class="wrap">
-<div class="grid">
-<section class="card">
-<h2>تقويم الحجوزات</h2>
-<div class="month">
-<button class="secondary" id="prev">❯</button>
-<strong id="monthLabel"></strong>
-<button class="secondary" id="next">❮</button>
-</div>
-<div class="week">
-<span>الأحد</span><span>الإثنين</span><span>الثلاثاء</span><span>الأربعاء</span><span>الخميس</span><span>الجمعة</span><span>السبت</span>
-</div>
-<div class="days" id="days"></div>
-<div class="legend">
-<span><i class="dot green"></i>محجوز ومؤكد</span>
-<span><i class="dot red"></i>ملغي</span>
-<span><i class="dot blue"></i>اختيارك</span>
-<span><i class="dot gray"></i>متاح</span>
-</div>
-<p class="note">اختر أول وآخر يوم متواصل للحجز. الأيام المحجوزة غير متاحة.</p>
-</section>
-<section class="card">
-<h2>دخول العائلة والحجز</h2>
-<div id="authArea">
-<label for="email">البريد الإلكتروني</label>
-<input id="email" type="email" placeholder="name@example.com">
-<button id="login" class="full">إرسال رابط تسجيل الدخول</button>
-<p class="note" id="authMsg">كل فرد يدخل ببريده الإلكتروني.</p>
-</div>
-<div id="signedIn" class="hidden">
-<p id="who" class="note"></p>
-<button class="secondary" id="logout">تسجيل الخروج</button>
-</div>
-<div id="bookingForm" class="hidden">
-<label for="name">اسم فرد العائلة</label>
-<input id="name" placeholder="الاسم الكامل" maxlength="80">
-<label for="from">أول يوم للحجز</label>
-<input id="from" type="date">
-<label for="to">آخر يوم للحجز (شامل)</label>
-<input id="to" type="date">
-<button class="full" id="submit">تأكيد الحجز مباشرة</button>
-<div class="status" id="message" role="status">اختر أيامك واضغط تأكيد الحجز.</div>
-<hr>
-<h2>حجوزاتي</h2>
-<div id="myBookings"></div>
-</div>
-</section>
-</div>
-<section class="gallery">
-<img src="IMG_4815.jpeg" alt="واجهة الشاليه">
-<img src="IMG_4813.jpeg" alt="إطلالة دار حصة">
-</section>
-<section class="card" style="margin-top:20px">
-<h2>📍 موقع دار حصة</h2>
-<p class="note">افتح موقع الشاليه في خرائط Google.</p>
-<a href="https://maps.app.goo.gl/4uaQPWkfkPFL2L5y6?g_st=ic" target="_blank" rel="noopener noreferrer">افتح موقع دار حصة على Google Maps ↗</a>
-</section>
-</main>
-<div class="footer">دار حصة 3253 · نظام الحجوزات العائلية</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-<script>
-const $=id=>document.getElementById(id);
-const pad=n=>String(n).padStart(2,'0');
+<!DOCTYPE html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="#111820" name="theme-color"/><title>دار حصة | الحجوزات العائلية</title><style>
+:root{font-family:Tahoma,Arial,sans-serif;color:#17202a;background:#f5f6f7}*{box-sizing:border-box}body{margin:0}header{background:#111820;color:white;padding:13px max(20px,calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}header img{height:52px;max-width:135px;object-fit:contain;border-radius:5px}header small{display:block;color:#c7b48b;margin-top:4px}.hero{position:relative;min-height:310px;background:linear-gradient(90deg,rgba(12,22,30,.72),rgba(12,22,30,.1)),url('IMG_4813.jpeg') center 56%/cover;display:flex;align-items:center;color:white}.hero>div{width:min(1100px,94%);margin:auto}.hero h1{font-size:clamp(35px,6vw,65px);margin:0}.hero p{font-size:18px;max-width:470px;line-height:1.9}.wrap{max-width:1100px;margin:26px auto;padding:0 15px}.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.card{background:white;border:1px solid #e5e7eb;border-radius:17px;padding:20px;box-shadow:0 5px 22px #10182009}h2{margin:0 0 17px;font-size:21px}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:11px 14px;background:#182531;color:white}button.secondary{background:#eceef0;color:#182531}button:disabled{opacity:.4;cursor:not-allowed}.month{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.week,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.week span{text-align:center;font-size:12px;color:#68737e;padding:8px 0}.day{height:51px;border:1px solid #e3e6e8;background:#f8f9fa;color:#1d2934;border-radius:8px;position:relative}.day.selected{outline:2px solid #2b76b7;background:#e2effb}.day.pending{background:#fff1bc;border-color:#e4b329}.day.confirmed{background:#d8f5e4;border-color:#32a368}.day.cancelled{background:#fde1e1;border-color:#dc5555}.day:disabled{opacity:1;cursor:not-allowed}.legend{display:flex;flex-wrap:wrap;gap:13px;margin:18px 0 0;font-size:13px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-left:5px}.yellow{background:#e4b329}.green{background:#32a368}.red{background:#dc5555}.blue{background:#2b76b7}label{display:block;font-weight:bold;font-size:13px;margin:15px 0 6px}input{width:100%;padding:12px;border:1px solid #d5dbe0;border-radius:9px;background:white}p.note{font-size:13px;color:#65717d;line-height:1.8}.full{width:100%;margin-top:16px}.status{padding:10px 12px;border-radius:8px;background:#f4f5f7;margin:10px 0;font-size:13px;line-height:1.7}.request{border:1px solid #e2e5e8;border-radius:11px;padding:12px;margin:10px 0}.request strong{display:block;margin-bottom:6px}.request small{color:#68737e}.actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.approve{background:#18844a}.reject{background:#b63535}.gallery{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}.gallery img{width:100%;height:260px;object-fit:cover;border-radius:14px}.footer{text-align:center;color:#6c7780;padding:35px 12px;font-size:13px}.pill{background:#a9874b;color:white;padding:8px 11px;border-radius:20px;font-size:12px}.hidden{display:none!important}@media(max-width:760px){.grid{grid-template-columns:1fr}.gallery img{height:190px}.hero{min-height:270px}.day{height:44px;padding:0}header img{height:43px}}
+</style></head><body><header><div><strong>دار حصة</strong><small>الحجوزات العائلية · 3253</small></div><img alt="شعار دار حصة" src="IMG_4814.jpeg"/><span class="pill">خاص بالعائلة</span></header><section class="hero"><div><h1>دار حصة</h1><p>مكان يجمعنا، وذكريات تبقى. احجز يوم أو أكثر بسهولة، ويتأكد حجزك مباشرة بدون انتظار موافقة.</p></div></section><main class="wrap"><div class="grid"><section class="card"><h2>تقويم الحجوزات</h2><div class="month"><button class="secondary" id="prev">❯</button><strong id="monthLabel"></strong><button class="secondary" id="next">❮</button></div><div class="week"><span>الأحد</span><span>الإثنين</span><span>الثلاثاء</span><span>الأربعاء</span><span>الخميس</span><span>الجمعة</span><span>السبت</span></div><div class="days" id="days"></div><div class="legend"><span><i class="dot green"></i>محجوز</span><span><i class="dot blue"></i>اختيارك</span><span>⬜ متاح</span></div><p class="note">اضغط على تاريخ البداية ثم تاريخ النهاية، أو اختر نفس اليوم للحجز ليوم واحد. الأيام المحجوزة غير متاحة.</p></section><section class="card"><h2>حساب العائلة</h2><div id="authArea"><label for="email">البريد الإلكتروني</label><input autocomplete="email" id="email" placeholder="name@example.com" type="email"/><div class="actions"><button id="login">إرسال رابط الدخول إلى البريد</button></div></div><div class="hidden" id="memberArea"><div class="status">مسجّل الدخول: <strong id="memberEmail"></strong></div><button class="secondary" id="logout">تسجيل خروج</button></div><div class="status" id="authMessage" role="status">سجّل حسابك أو ادخل حتى تحجز.</div><hr style="border:0;border-top:1px solid #e5e7eb;margin:25px 0"/><h2>حجز مباشر</h2><label for="name">اسم صاحب الحجز</label><input id="name" maxlength="80" placeholder="الاسم الكامل"/><label for="from">من تاريخ (يشمل اليوم)</label><input id="from" type="date"/><label for="to">إلى تاريخ (يشمل اليوم)</label><input id="to" type="date"/><button class="full" id="submit">تأكيد الحجز مباشرة</button><div class="status" id="message" role="status">بعد تسجيل الدخول، اختر الأيام واضغط تأكيد الحجز.</div><hr style="border:0;border-top:1px solid #e5e7eb;margin:25px 0"/><h2>حجوزاتي</h2><div id="myBookings">سجّل دخولك لعرض حجوزاتك.</div></section></div><section class="gallery"><img alt="واجهة شاليه دار حصة" src="IMG_4815.jpeg"/><img alt="إطلالة دار حصة البحرية" src="IMG_4813.jpeg"/></section><section class="card" id="location" style="margin-top:20px"><h2>📍 موقع دار حصة</h2><p class="note">اضغط على الزر لفتح موقع الشاليه في خرائط Google والحصول على الاتجاهات مباشرة.</p><a href="https://maps.app.goo.gl/4uaQPWkfkPFL2L5y6?g_st=ic" rel="noopener noreferrer" style="display:inline-block;background:#182531;color:white;text-decoration:none;border-radius:10px;padding:13px 20px;font-weight:bold" target="_blank">افتح موقع دار حصة على Google Maps ↗</a></section></main><div class="footer">دار حصة 3253 · الحجوزات العائلية</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script><script src="config.js"></script><script>
+'use strict';
+const $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,'0');
 const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const cfg=window.DAR_HESSA_CONFIG||{};
-const ready=typeof supabase!=='undefined'&&cfg.url?.startsWith('https://')&&cfg.anonKey?.length>30;
-const db=ready?supabase.createClient(cfg.url,cfg.anonKey):null;
-let bookings=[],myBookings=[],user=null,view=new Date(),loading=false;
-view.setDate(1);
-const chosen=new Set();
-const active=d=>bookings.find(b=>b.status!=='cancelled'&&b.start_date<=d&&b.end_date>=d);
-const cancelled=d=>bookings.some(b=>b.status==='cancelled'&&b.start_date<=d&&b.end_date>=d);
-
-function render(){
-const y=view.getFullYear(),m=view.getMonth();
-$('monthLabel').textContent=new Intl.DateTimeFormat('ar-KW',{month:'long',year:'numeric'}).format(view);
-const days=$('days');days.innerHTML='';
-for(let i=0;i<new Date(y,m,1).getDay();i++)days.append(document.createElement('span'));
-for(let n=1;n<=new Date(y,m+1,0).getDate();n++){
-const d=iso(new Date(y,m,n)),b=active(d),btn=document.createElement('button');
-btn.className='day '+(b?'confirmed':cancelled(d)?'cancelled':'')+(chosen.has(d)?' selected':'');
-btn.textContent=n;
-btn.title=b?'محجوز':'متاح';
-btn.disabled=!!b||!user;
-btn.onclick=()=>{
-chosen.has(d)?chosen.delete(d):chosen.add(d);
-const a=[...chosen].sort();
-$('from').value=a[0]||'';
-$('to').value=a.at(-1)||'';
-render();
-};
-days.append(btn);
+const parse=s=>new Date(s+'T12:00:00');
+const dateRange=(a,b)=>{let arr=[],d=parse(a),e=parse(b);for(let i=0;d<=e&&i<365;i++,d.setDate(d.getDate()+1))arr.push(iso(d));return arr};
+let view=new Date(), bookings=[],user=null,firstPick=null;view.setDate(1);
+let db=null;
+try{const cfg=window.DAR_HESSA_CONFIG;if(!cfg||!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(cfg.url)||!cfg.anonKey||cfg.anonKey.includes('YOUR_'))throw Error('أكمل بيانات Supabase في ملف config.js أولاً');db=window.supabase.createClient(cfg.url,cfg.anonKey)}catch(e){$('message').textContent=e.message;$('authMessage').textContent=e.message;}
+const active=d=>bookings.find(b=>b.status==='confirmed'&&b.start_date<=d&&b.end_date>=d);
+function render(){const y=view.getFullYear(),m=view.getMonth();$('monthLabel').textContent=new Intl.DateTimeFormat('ar-KW',{month:'long',year:'numeric'}).format(view);const el=$('days');el.replaceChildren();for(let i=0;i<new Date(y,m,1).getDay();i++)el.append(document.createElement('span'));for(let n=1;n<=new Date(y,m+1,0).getDate();n++){const d=iso(new Date(y,m,n)),b=active(d),btn=document.createElement('button');btn.className='day'+(b?' confirmed':'')+($('from').value&&$('to').value&&d>=$('from').value&&d<=$('to').value?' selected':'');btn.textContent=n;btn.title=b?'محجوز: '+b.guest_name:'متاح';btn.disabled=!!b;btn.onclick=()=>{if(!firstPick||d<firstPick){firstPick=d;$('from').value=d;$('to').value=d}else{$('from').value=firstPick;$('to').value=d;firstPick=null}render()};el.append(btn)}const mine=$('myBookings');mine.replaceChildren();if(!user){mine.textContent='سجّل دخولك لعرض حجوزاتك.';return}const rows=bookings.filter(b=>b.user_id===user.id&&b.status!=='cancelled').sort((a,b)=>b.start_date.localeCompare(a.start_date));if(!rows.length){mine.textContent='لا توجد حجوزات بعد.';return}for(const b of rows){const item=document.createElement('div');item.className='request';const title=document.createElement('strong');title.textContent=b.guest_name;item.append(title);const detail=document.createElement('small');detail.textContent=`${b.start_date} إلى ${b.end_date} · ${b.status==='confirmed'?'تم الحجز':'ملغي'}`;item.append(detail);if(b.status==='confirmed'){const cancel=document.createElement('button');cancel.className='reject';cancel.style.marginTop='9px';cancel.textContent='إلغاء حجزي';cancel.onclick=async()=>{if(!confirm('متأكد تبي تلغي حجزك؟'))return;cancel.disabled=true;const {error}=await db.from('bookings').update({status:'cancelled'}).eq('id',b.id).eq('user_id',user.id).eq('status','confirmed');if(error){$('message').textContent='تعذر الإلغاء: '+error.message;cancel.disabled=false}else{$('message').textContent='تم إلغاء الحجز، والأيام رجعت متاحة.';await refresh()}};item.append(cancel)}mine.append(item)}}
+async function refresh(){if(!db||!user)return;const {data,error}=await db.from('bookings').select('id,user_id,guest_name,start_date,end_date,status').order('start_date',{ascending:true}).limit(2000);if(error){$('message').textContent='تعذر تحميل الحجوزات: '+error.message;return}bookings=data||[];render()}
+async function auth(){
+ if(!db)return;
+ const email=$('email').value.trim();
+ if(!email){$('authMessage').textContent='أدخل بريدك الإلكتروني';return}
+ $('login').disabled=true;
+ const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});
+ $('login').disabled=false;
+ $('authMessage').textContent=error?'تعذر إرسال الرابط: '+error.message:'أرسلنا رابط الدخول إلى بريدك. افتحه من نفس المتصفح.';
 }
-renderMine();
-}
-
-function renderMine(){
-const panel=$('myBookings');panel.innerHTML='';
-if(!user)return;
-const mine=myBookings.filter(b=>b.status!=='cancelled').slice().reverse();
-if(!mine.length){panel.textContent='ما عندك حجوزات نشطة.';return;}
-for(const b of mine){
-const div=document.createElement('div');div.className='request';
-const strong=document.createElement('strong');strong.textContent=b.guest_name;div.append(strong);
-const small=document.createElement('small');small.textContent=`${b.start_date} إلى ${b.end_date} · مؤكد`;div.append(small);
-const actions=document.createElement('div');actions.className='actions';
-const btn=document.createElement('button');btn.className='danger';btn.textContent='إلغاء حجزي';
-btn.onclick=()=>cancelMine(b.id);actions.append(btn);div.append(actions);panel.append(div);
-}
-}
-
-async function load(){
-if(!db||!user)return;
-const [all,mine]=await Promise.all([
-db.from('bookings').select('id,start_date,end_date,status').order('start_date'),
-db.from('bookings').select('id,guest_name,start_date,end_date,status').eq('user_id',user.id).order('start_date')
-]);
-if(all.error||mine.error){
-$('message').textContent='تعذر تحميل الحجوزات: '+(all.error||mine.error).message;
-return;
-}
-bookings=all.data||[];myBookings=mine.data||[];render();
-}
-
-async function cancelMine(id){
-if(!user||!confirm('هل تريد إلغاء هذا الحجز؟'))return;
-const {data,error}=await db.from('bookings')
-.update({status:'cancelled'})
-.eq('id',id).eq('user_id',user.id)
-.eq('status','confirmed').select('id');
-if(error||!data?.length){
-alert('تعذر إلغاء الحجز: '+(error?.message||'غير مسموح'));
-return;
-}
-$('message').textContent='تم إلغاء الحجز ✅';
-await load();
-}
-
-async function sessionChanged(){
-if(!db)return;
-const {data:{user:u}}=await db.auth.getUser();
-user=u;
-$('authArea').classList.toggle('hidden',!!user);
-$('signedIn').classList.toggle('hidden',!user);
-$('bookingForm').classList.toggle('hidden',!user);
-$('who').textContent=user?'تم الدخول: '+user.email:'';
-if(user)await load();
-else{bookings=[];myBookings=[];render();}
-}
-
-$('login').onclick=async()=>{
-if(!db)return;
-const email=$('email').value.trim();
-if(!email)return $('authMsg').textContent='اكتب بريدك الإلكتروني';
-const {error}=await db.auth.signInWithOtp({
-email,options:{emailRedirectTo:location.origin+location.pathname}
-});
-$('authMsg').textContent=error?'تعذر إرسال الرابط: '+error.message:'تم إرسال رابط الدخول إلى بريدك.';
-};
-
-$('logout').onclick=async()=>{await db.auth.signOut();await sessionChanged();};
-$('prev').onclick=()=>{view.setMonth(view.getMonth()-1);render();};
-$('next').onclick=()=>{view.setMonth(view.getMonth()+1);render();};
-
-$('submit').onclick=async()=>{
-if(!user||loading)return;
-const guest_name=$('name').value.trim();
-const start_date=$('from').value,end_date=$('to').value;
-if(!guest_name||!start_date||!end_date)return $('message').textContent='أدخل الاسم والتواريخ.';
-if(start_date>end_date)return $('message').textContent='تاريخ النهاية يسبق البداية.';
-if(start_date<iso(new Date()))return $('message').textContent='لا يمكن حجز تاريخ مضى.';
-const count=Math.round((Date.parse(end_date)-Date.parse(start_date))/86400000)+1;
-if(count>365)return $('message').textContent='أقصى مدة 365 يوماً.';
-if(bookings.some(b=>b.status!=='cancelled'&&b.start_date<=end_date&&b.end_date>=start_date))
-return $('message').textContent='بعض الأيام المختارة محجوزة مسبقاً.';
-loading=true;$('submit').disabled=true;
-$('message').textContent='جارٍ تسجيل الحجز...';
-try{
-const {error}=await db.from('bookings').insert({
-guest_name,start_date,end_date,user_id:user.id,status:'confirmed'
-});
-if(error){$('message').textContent='تعذر الحجز: '+error.message;return;}
-chosen.clear();$('from').value='';$('to').value='';
-view=new Date(start_date+'T12:00:00');view.setDate(1);
-$('message').textContent='تم الحجز بنجاح ✅';
-await load();
-}finally{loading=false;$('submit').disabled=false;}
-};
-
-if(!ready){
-$('authMsg').textContent='الموقع يحتاج ربط config.js مع Supabase.';
-$('login').disabled=true;
-}else{
-db.auth.onAuthStateChange(()=>setTimeout(sessionChanged,0));
-sessionChanged();
-setInterval(()=>{if(user)load();},30000);
-}
-render();
-</script>
-</body>
-</html>
+async function syncAuth(){if(!db)return;const {data,error}=await db.auth.getUser();user=error?null:(data.user||null);$('authArea').classList.toggle('hidden',!!user);$('memberArea').classList.toggle('hidden',!user);$('memberEmail').textContent=user?.email||'';await refresh()}
+$('login').onclick=auth;$('logout').onclick=async()=>{await db.auth.signOut();await syncAuth()};
+$('prev').onclick=()=>{view.setMonth(view.getMonth()-1);render()};$('next').onclick=()=>{view.setMonth(view.getMonth()+1);render()};
+$('from').onchange=()=>{firstPick=null;render()};$('to').onchange=()=>{firstPick=null;render()};
+$('submit').onclick=async()=>{if(!db)return;if(!user){$('message').textContent='سجّل دخولك أولاً';return}const name=$('name').value.trim(),from=$('from').value,to=$('to').value;if(name.length<2||name.length>80||!from||!to){$('message').textContent='أدخل الاسم والتاريخين';return}if(to<from||dateRange(from,to).length===0||dateRange(from,to).length>364){$('message').textContent='اختر تاريخ بداية ونهاية صحيحين بحد أقصى 364 يوماً';return}if(bookings.some(b=>b.status==='confirmed'&&b.start_date<=to&&b.end_date>=from)){$('message').textContent='بعض الأيام محجوزة مسبقاً';return}const btn=$('submit');btn.disabled=true;const {error}=await db.from('bookings').insert({user_id:user.id,guest_name:name,start_date:from,end_date:to,status:'confirmed'});btn.disabled=false;if(error){$('message').textContent=error.code==='23P01'?'التواريخ محجوزة بالفعل، اختر تواريخ ثانية.':'تعذر الحجز: '+error.message;await refresh();return}$('message').textContent='تم الحجز بنجاح ✅';firstPick=null;view=parse(from);view.setDate(1);await refresh()};
+render();if(db){syncAuth();document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});setInterval(refresh,30000)}
+</script></body></html>
